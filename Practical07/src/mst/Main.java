@@ -55,20 +55,39 @@ public class Main
 		
 		// 
 		// CONTINUOUS ASSESSMENT TASK - Implement This Function (Worth 2 marks)
-		// PUT YOUR UNISA USERID HERE:
+		// PUT YOUR UNISA USERID HERE:110443588
 		//
 		
 		// Here's an outline:
 		// setup a list of the nodes needed to be connected		
-		// setup a list of edges from the original graph to consider adding to mst		
+		List<Node> nodeList = graph.getNodes();
+		// setup a list of edges from the original graph to consider adding to mst	
+		List<Edge> edgeList = graph.getEdges();
 		// while there are still nodes to connect and edges to consider:
+		Edge min = new Edge(null,null,Integer.MAX_VALUE);
+		while(!nodeList.isEmpty() && !edgeList.isEmpty()) {
 			// find the edge with minimum weight from the list of edges to consider
+			for(int i = 0; i < edgeList.size(); i++) {
+				if(edgeList.get(i).weight < min.weight) {
+					min = edgeList.get(i);
+				}
+			}
 			// find the nodes in mst that correspond to the nodes of the found edge
+			Node NodeA = mst.findNode(min.nodeA.getName());
+			Node NodeB = mst.findNode(min.nodeB.getName());
 			// if they are not connected yet in mst:
+			if(!mst.isConnected(NodeA, NodeB)) {
 				// connect the nodes in mst
+				mst.connectNodes(NodeA, NodeB, min.weight);
 				// remove the nodes from the list of nodes needed to be connected
-			// remove the edge from the list to consider
-		
+				nodeList.remove(NodeB);
+				nodeList.remove(NodeA);
+				// remove the edge from the list to consider
+				edgeList.remove(min);
+			}
+
+
+		}
 		return mst;
 	}
 	
