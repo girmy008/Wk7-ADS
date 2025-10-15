@@ -65,10 +65,12 @@ public class Main
 		List<Edge> edgeList = graph.getEdges();
 		// while there are still nodes to connect and edges to consider:
 		Edge min = new Edge(null,null,Integer.MAX_VALUE);
+		int minIndex = Integer.MAX_VALUE;
 		while(!nodeList.isEmpty() && !edgeList.isEmpty()) {
 			// find the edge with minimum weight from the list of edges to consider
 			for(int i = 0; i < edgeList.size(); i++) {
 				if(edgeList.get(i).weight < min.weight) {
+					minIndex = i;
 					min = edgeList.get(i);
 				}
 			}
@@ -83,7 +85,7 @@ public class Main
 				nodeList.remove(NodeB);
 				nodeList.remove(NodeA);
 				// remove the edge from the list to consider
-				edgeList.remove(min);
+				edgeList.remove(minIndex);
 			}
 
 
