@@ -65,6 +65,11 @@ public class Main
 		List<Edge> edgeList = graph.getEdges();
 		// while there are still nodes to connect and edges to consider:
 		Edge min = new Edge(null,null,Integer.MAX_VALUE);
+		
+		int vertex1 = 0;
+		int vertex2 = 0;
+		
+		Edge reverseMin = new Edge(null,null,Integer.MAX_VALUE);
 		int minIndex = Integer.MAX_VALUE;
 		while(!nodeList.isEmpty() && !edgeList.isEmpty()) {
 			// find the edge with minimum weight from the list of edges to consider
@@ -72,21 +77,37 @@ public class Main
 				if(edgeList.get(i).weight < min.weight) {
 					minIndex = i;
 					min = edgeList.get(i);
+				} else if (edgeList.get(i).nodeA == min.nodeB && edgeList.get(i).nodeB == min.nodeA ) {
+					reverseMin = edgeList.get(i);
 				}
 			}
 			// find the nodes in mst that correspond to the nodes of the found edge
 			Node NodeA = mst.findNode(min.nodeA.getName());
 			Node NodeB = mst.findNode(min.nodeB.getName());
 			// if they are not connected yet in mst:
-			if(!mst.isConnected(NodeA, NodeB)) {
+			if(!mst.isConnected(NodeA, NodeB) && !mst.isConnected(NodeB, NodeA)) {
 				// connect the nodes in mst
 				mst.connectNodes(NodeA, NodeB, min.weight);
 				// remove the nodes from the list of nodes needed to be connected
-				nodeList.remove(NodeB);
-				nodeList.remove(NodeA);
+				for (int i = 0; i < nodeList.size();i++) {
+					if (nodeList.get(i) == NodeA) {
+						vertex1 = i;
+					} else if (nodeList.get(i) == NodeB) {
+						vertex2 = i;
+					}
+				}
+				nodeList.remove(vertex1);
+				nodeList.remove(vertex2);
 				// remove the edge from the list to consider
 				edgeList.remove(minIndex);
+
+				
 			}
+			min = new Edge(null,null,Integer.MAX_VALUE);
+			reverseMin = new Edge(null,null,Integer.MAX_VALUE);
+			minIndex = Integer.MAX_VALUE;
+			vertex1 = 0;
+			vertex2 = 0;
 
 
 		}
